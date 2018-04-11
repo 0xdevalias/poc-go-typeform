@@ -1,4 +1,4 @@
-# poc-typeform
+# poc-go-typeform
 
 PoC reference for accessing the modern (aka 2018+) [Typeform API](https://developer.typeform.com/).
 
