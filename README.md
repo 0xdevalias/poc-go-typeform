@@ -87,7 +87,7 @@ func KokiUnmarshal(data []byte, v interface{}) error {
 }
 ```
 
-## Alternative Golang Typesafe Client Options
+## Alternative Golang Typeform Client Options
 
 Looking around.. there just didn't really seem to be any good/stand out options..
 
