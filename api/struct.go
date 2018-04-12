@@ -90,7 +90,7 @@ type Form struct {
 	Theme     Href     `json:"theme"`
 	Workspace Href     `json:"workspace"`
 	Links     Links    `json:"_links"`
-	Language  string   `json:"language"`
+	Language  string   `json:"language,omitempty"` // TODO: Is this meant to be a field anymore? Seems to be in settings..
 	Settings  Settings `json:"settings"`
 }
 
@@ -146,7 +146,7 @@ type WelcomeScreen struct {
 type WelcomeScreenProperties struct {
 	ShowButton  bool   `json:"show_button"`
 	Description string `json:"description"`
-	ButtonText  string `json:"button_text"`
+	ButtonText  string `json:"button_text,omitempty"`
 }
 
 type ThankyouScreen struct {
@@ -174,23 +174,23 @@ type Field struct {
 	Ref         string           `json:"ref"`
 	Title       string           `json:"title"`
 	Type        FieldType        `json:"type"`
-	Properties  FieldProperties  `json:"properties"`
+	Properties  FieldProperties  `json:"properties,omitempty"`
 	Validations FieldValidations `json:"validations"`
 	//Attachment FieldAttachment `json:"attachment"`
 }
 
 type FieldProperties struct {
-	Randomize              bool           `json:"randomize"`
-	AllowMultipleSelection bool           `json:"allow_multiple_selection"`
-	AllowOtherChoice       bool           `json:"allow_other_choice"`
-	VerticalAlignment      bool           `json:"vertical_alignment"`
-	Choices                []FieldChoices `json:"choices"`
+	Randomize              bool           `json:"randomize,omitempty"` // TODO: Not omitempty?
+	AllowMultipleSelection bool           `json:"allow_multiple_selection,omitempty"` // TODO: Not omitempty?
+	AllowOtherChoice       bool           `json:"allow_other_choice,omitempty"`
+	VerticalAlignment      bool           `json:"vertical_alignment,omitempty"`
+	Choices                []FieldChoices `json:"choices,omitempty"`
 
 	// TODO: These might only be for groups?
-	Description string  `json:"description"`
-	ShowButton  bool    `json:"show_button"`
-	ButtonText  string  `json:"button_text"`
-	Fields      []Field `json:"fields"`
+	Description string  `json:"description,omitempty"`
+	ShowButton  bool    `json:"show_button,omitempty"`
+	ButtonText  string  `json:"button_text,omitempty"`
+	Fields      []Field `json:"fields,omitempty"`
 }
 
 type FieldChoices struct {
@@ -201,8 +201,8 @@ type FieldChoices struct {
 
 type FieldValidations struct {
 	Required bool `json:"required"`
-	MinValue int  `json:"min_value"`
-	MaxValue int  `json:"max_value"`
+	MinValue int  `json:"min_value"` // TODO: Omitempty?
+	MaxValue int  `json:"max_value"` // TODO: Omitempty?
 }
 
 //type FieldAttachment struct{}
@@ -221,23 +221,23 @@ type Action struct {
 
 type Detail struct {
 	To     DetailTo     `json:"to"`
-	Target DetailTarget `json:"target"`
-	Value  DetailValue  `json:"value"`
+	Target DetailTarget `json:"target,omitempty"`
+	Value  DetailValue  `json:"value,omitempty"`
 }
 
 type DetailTo struct {
-	Type  DetailToType `json:"type"`
-	Value string       `json:"value"`
+	Type  DetailToType `json:"type,omitempty"`
+	Value string       `json:"value,omitempty"`
 }
 
 type DetailTarget struct {
-	Type  DetailTargetType  `json:"type"`
-	Value DetailTargetValue `json:"value"`
+	Type  DetailTargetType  `json:"type,omitempty"`
+	Value DetailTargetValue `json:"value,omitempty"`
 }
 
 type DetailValue struct {
-	Type  string `json:"type"`
-	Value int    `json:"value"`
+	Type  string `json:"type,omitempty"`
+	Value int    `json:"value,omitempty"`
 }
 
 type Condition struct {
