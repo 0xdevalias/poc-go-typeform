@@ -17,7 +17,7 @@ const (
 func DefaultClient(apiKey string) *Client {
 	c := resty.DefaultClient
 	c.SetHostURL(BaseUrl)
-	c.SetHeader("Authorization", fmt.Sprintf("Bearer %s", apiKey))
+	c.SetAuthToken(apiKey)
 
 	return &Client{restyClient: c}
 }
