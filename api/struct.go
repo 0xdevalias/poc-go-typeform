@@ -87,40 +87,110 @@ type Form struct {
 	Fields          []Field          `json:"fields"`
 	Logic           []Logic          `json:"logic"`
 
-	Theme     string   `json:"theme>href"`
-	Workspace string   `json:"workspace>href"`
-	Links     []string `json:"_links>display"`
+	Theme     Href     `json:"theme"`
+	Workspace Href     `json:"workspace"`
+	Links     Links    `json:"_links"`
 	Language  string   `json:"language"`
 	Settings  Settings `json:"settings"`
 }
 
-type Settings struct{}
+type Links struct {
+	Display string `json:"display"`
+}
 
-type WelcomeScreen struct{}
+type Href struct {
+	Href string `json:"href"`
+}
 
-type ThankyouScreen struct{}
+type Settings struct {
+	IsPublic             bool   `json:"is_public"`
+	IsTrial              bool   `json:"is_trial"`
+	Language             string `json:"language"`
+	ProgressBar          string `json:"progress_bar"`
+	ShowProgressBar      bool   `json:"show_progress_bar"`
+	ShowTypeformBranding bool   `json:"show_typeform_branding"`
+	Meta                 struct {
+		AllowIndexing bool `json:"allow_indexing"`
+	} `json:"meta"`
+	Notifications Notifications `json:"notifications"`
+}
+
+type Notifications struct {
+	Self       NotificationSelf       `json:"self"`
+	Respondent NotificationRespondent `json:"respondent"`
+}
+
+type notificationCommon struct {
+	Subject string `json:"subject"`
+	Message string `json:"message"`
+	Enabled bool   `json:"enabled"`
+}
+
+type NotificationSelf struct {
+	Recipients []string `json:"recipients"`
+	notificationCommon
+}
+
+type NotificationRespondent struct {
+	Recipient string `json:"recipient"`
+	notificationCommon
+}
+
+type WelcomeScreen struct {
+	Ref        string                  `json:"ref"`
+	Title      string                  `json:"title"`
+	Properties WelcomeScreenProperties `json:"properties"`
+	Attachment Attachment              `json:"attachment"`
+}
+
+type WelcomeScreenProperties struct {
+	ShowButton  bool   `json:"show_button"`
+	Description string `json:"description"`
+	ButtonText  string `json:"button_text"`
+}
+
+type ThankyouScreen struct {
+	Ref        string                   `json:"ref"`
+	Title      string                   `json:"title"`
+	Properties ThankyouScreenProperties `json:"properties"`
+	Attachment Attachment               `json:"attachment"`
+}
+
+type ThankyouScreenProperties struct {
+	ShowButton  bool   `json:"show_button"`
+	ShareIcons  bool   `json:"share_icons"`
+	ButtonMode  string `json:"button_mode"`
+	ButtonText  string `json:"button_text"`
+	RedirectUrl string `json:"redirect_url"`
+}
+
+type Attachment struct {
+	Type string `json:"type"`
+	Href string `json:"href"`
+}
 
 type Field struct {
-	Ref        string          `json:"ref"`
-	Title      string          `json:"title"`
-	Type       FieldType       `json:"type"`
-	Properties FieldProperties `json:"properties"`
-	//Validations FieldValidations `json:"validations"`
+	ID          string           `json:"id"`
+	Ref         string           `json:"ref"`
+	Title       string           `json:"title"`
+	Type        FieldType        `json:"type"`
+	Properties  FieldProperties  `json:"properties"`
+	Validations FieldValidations `json:"validations"`
 	//Attachment FieldAttachment `json:"attachment"`
 }
 
 type FieldProperties struct {
-	Randomize bool `json:"randomize"`
-	AllowMultipleSelection bool `json:"allow_multiple_selection"`
-	AllowOtherChoice bool `json:"allow_other_choice"`
-	VerticalAlignment bool `json:"vertical_alignment"`
-	Choices []FieldChoices `json:"choices"`
+	Randomize              bool           `json:"randomize"`
+	AllowMultipleSelection bool           `json:"allow_multiple_selection"`
+	AllowOtherChoice       bool           `json:"allow_other_choice"`
+	VerticalAlignment      bool           `json:"vertical_alignment"`
+	Choices                []FieldChoices `json:"choices"`
 
 	// TODO: These might only be for groups?
-	Description string `json:"description"`
-	ShowButton bool `json:"show_button"`
-	ButtonText string `json:"button_text"`
-	Fields []Field `json:"fields"`
+	Description string  `json:"description"`
+	ShowButton  bool    `json:"show_button"`
+	ButtonText  string  `json:"button_text"`
+	Fields      []Field `json:"fields"`
 }
 
 type FieldChoices struct {
@@ -131,13 +201,16 @@ type FieldChoices struct {
 
 type FieldValidations struct {
 	Required bool `json:"required"`
+	MinValue int  `json:"min_value"`
+	MaxValue int  `json:"max_value"`
 }
 
-type FieldAttachment struct{}
+//type FieldAttachment struct{}
 
 type Logic struct {
-	Type LogicType
-	Ref  string
+	Type    LogicType `json:"type"`
+	Ref     string    `json:"ref"`
+	Actions []Action  `json:"actions"`
 }
 
 type Action struct {
