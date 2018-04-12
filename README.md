@@ -8,9 +8,9 @@ Definitely incomplete, but nothing else seems to even exist in Golang-world for 
 
 ```go
 import (
-	"log"
+    "log"
 
-	"github.com/0xdevalias/poc-typeform/api"
+    "github.com/0xdevalias/poc-typeform/api"
 )
 
 def main() {
@@ -25,7 +25,69 @@ def main() {
 }
 ```
 
-## Alternative Library Options
+## Changing JSON Library
+
+Since we use [Resty](https://github.com/go-resty/resty) under the hood, [it's really easy](https://github.com/go-resty/resty/issues/76#issuecomment-314015250) to switch the JSON library used for marshalling/unmarshalling. For example:
+
+Using [json-iterator](https://github.com/json-iterator/go) for fast and efficient en/decoding:
+
+```go
+import (
+    jsoniter "github.com/json-iterator/go"
+)
+
+c := api.DefaultClient("SOME-API-TOKEN")
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+c.RestyClient().JSONMarshal = json.Marshal
+c.RestyClient().JSONUnmarshal = json.Unmarshal
+```
+
+Using [koki/json](https://github.com/koki/json) to log unhandled keys (good for debugging/API changes):
+
+```go
+import (
+  "log"
+
+    "github.com/koki/json"
+    "github.com/koki/json/jsonutil"
+)
+
+func main() {
+    c := api.DefaultClient("SOME-API-TOKEN")
+    c.RestyClient().JSONUnmarshal = json.Marshal
+    c.RestyClient().JSONUnmarshal = KokiUnmarshal
+}
+
+func KokiUnmarshal(data []byte, v interface{}) error {
+    obj := make(map[string]interface{})
+
+    err := json.Unmarshal(data, &obj)
+    if err != nil {
+        return err
+  }
+
+  err = jsonutil.UnmarshalMap(obj, &v)
+  if err != nil {
+    return err
+  }
+
+  extraneousPaths, err := jsonutil.ExtraneousFieldPaths(obj, v)
+  if err != nil {
+    return err
+  }
+  if len(extraneousPaths) > 0 {
+    log.Printf("Extra JSON fields found: %v", len(extraneousPaths))
+    for _, path := range extraneousPaths {
+      log.Printf("%#v", path)
+    }
+  }
+
+  return nil
+}
+```
+
+## Alternative Golang Typesafe Client Options
 
 Looking around.. there just didn't really seem to be any good/stand out options..
 
