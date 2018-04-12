@@ -40,6 +40,11 @@ func (c *Client) RetrieveForm(formId string) (*Form, error)  {
 	}
 }
 
+// RestyClient provides access to the underlying Resty client
+func (c *Client) RestyClient() (*resty.Client)  {
+	return c.restyClient
+}
+
 func errorResponseFormatter(resp *resty.Response) error {
 	return fmt.Errorf("api returned an error response (%v): %s", resp.StatusCode(), string(resp.Body()))
 }
